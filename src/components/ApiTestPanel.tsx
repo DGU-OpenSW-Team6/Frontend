@@ -14,7 +14,7 @@ const ApiTestPanel: React.FC = () => {
   // 컴포넌트 마운트 시 서버 연결 테스트
   useEffect(() => {
     console.log('🚀 API 테스트 패널 초기화');
-    console.log('📡 백엔드 주소: http://52.78.81.44:8000');
+    console.log('📡 프록시 경로: /api/* → http://52.78.81.44:8000/*');
     console.log('💡 콘솔에서 요청/응답을 확인하세요!');
   }, []);
 
@@ -76,12 +76,13 @@ const ApiTestPanel: React.FC = () => {
         borderRadius: '8px',
         marginBottom: '30px'
       }}>
-        <h3 style={{ marginTop: 0 }}>📡 백엔드 정보</h3>
-        <p><strong>주소:</strong> http://52.78.81.44:8000</p>
+        <h3 style={{ marginTop: 0 }}>📡 API 프록시 정보</h3>
+        <p><strong>프론트엔드 요청:</strong> /api/*</p>
+        <p><strong>백엔드 서버:</strong> http://52.78.81.44:8000/*</p>
         <p style={{ marginBottom: 0 }}>
           <strong>엔드포인트:</strong><br />
-          • POST /upload<br />
-          • GET /returnScore
+          • POST /api/upload<br />
+          • GET /api/returnScore
         </p>
       </div>
 
