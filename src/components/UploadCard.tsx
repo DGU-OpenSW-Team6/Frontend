@@ -70,7 +70,7 @@ const UploadCard: React.FC<UploadCardProps> = ({ onUpload }) => {
           <div className="paragraph">
             <p>
               Take a photo or export an image of your hand-drawn wireframe. 
-              We'll analyze common accessibility issues.
+            
             </p>
           </div>
         </div>
@@ -110,7 +110,7 @@ const UploadCard: React.FC<UploadCardProps> = ({ onUpload }) => {
       </div>
 
       <div className="footer-text">
-        <p>We check tappability.</p>
+        <p>We’ll analyze key accessibility issues in your sketch, including touch target size, spacing, and input labels.</p>
       </div>
     </div>
   );
