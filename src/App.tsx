@@ -3,22 +3,50 @@ import Login from './pages/Login'
 import WebUpload from './pages/WebUpload'
 import Analyzing from './pages/Analyzing'
 import Result from './pages/Result'
+import AccountPanel from './components/AccountPanel'
 import { uploadFile, getScore } from './api'
 import './App.css'
 
 type AppState = 'login' | 'upload' | 'analyzing' | 'results'
 
+interface UploadHistory {
+  id: string;
+  fileName: string;
+  uploadDate: Date;
+  score: number;
+}
+
 function App() {
   const [appState, setAppState] = useState<AppState>('login')
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
+  const [userEmail, setUserEmail] = useState<string>('')
+  const [userName, setUserName] = useState<string>('')
+  const [isAccountPanelOpen, setIsAccountPanelOpen] = useState<boolean>(false)
+  const [uploadHistory, setUploadHistory] = useState<UploadHistory[]>([])
   const [_taskId, setTaskId] = useState<string | null>(null)
   const [_error, setError] = useState<string | null>(null)
 
   const handleLogin = () => {
     // TODO: 실제 Google 로그인 로직 구현
     console.log('Login successful')
+    // 임시로 더미 데이터 설정 (실제로는 Google OAuth에서 받아옴)
+    setUserName('Alex Johnson')
+    setUserEmail('alex.johnson@example.com')
     setIsAuthenticated(true)
     setAppState('upload')
+  }
+
+  const getUserInitial = () => {
+    if (!userName) return 'A'
+    return userName.charAt(0).toUpperCase()
+  }
+
+  const handleProfileClick = () => {
+    setIsAccountPanelOpen(true)
+  }
+
+  const handleCloseAccountPanel = () => {
+    setIsAccountPanelOpen(false)
   }
 
   const handleUpload = async (file: File) => {
@@ -39,6 +67,16 @@ function App() {
         try {
           const scoreResult = await getScore()
           console.log('Score retrieved:', scoreResult)
+          
+          // 히스토리에 추가
+          const newHistoryItem: UploadHistory = {
+            id: uploadedTaskId || Date.now().toString(),
+            fileName: file.name,
+            uploadDate: new Date(),
+            score: scoreResult?.score || 0
+          }
+          setUploadHistory(prev => [newHistoryItem, ...prev])
+          
           setAppState('results')
         } catch (scoreErr: any) {
           if (scoreErr.response) {
@@ -77,9 +115,38 @@ function App() {
   return (
     <>
       {appState === 'login' && <Login onLogin={handleLogin} />}
-      {appState === 'upload' && isAuthenticated && <WebUpload onUpload={handleUpload} />}
-      {appState === 'analyzing' && isAuthenticated && <Analyzing />}
-      {appState === 'results' && isAuthenticated && <Result onReset={handleReset} />}
+      {appState === 'upload' && isAuthenticated && (
+        <WebUpload 
+          onUpload={handleUpload} 
+          userInitial={getUserInitial()} 
+          onProfileClick={handleProfileClick}
+        />
+      )}
+      {appState === 'analyzing' && isAuthenticated && (
+        <Analyzing 
+          userInitial={getUserInitial()} 
+          onProfileClick={handleProfileClick}
+        />
+      )}
+      {appState === 'results' && isAuthenticated && (
+        <Result 
+          onReset={handleReset} 
+          userInitial={getUserInitial()} 
+          onProfileClick={handleProfileClick}
+        />
+      )}
+      
+      {/* Account Panel */}
+      {isAuthenticated && (
+        <AccountPanel
+          isOpen={isAccountPanelOpen}
+          onClose={handleCloseAccountPanel}
+          userName={userName}
+          userEmail={userEmail}
+          userInitial={getUserInitial()}
+          uploadHistory={uploadHistory}
+        />
+      )}
     </>
   )
 }
