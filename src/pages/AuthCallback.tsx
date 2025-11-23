@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuthStore } from '../store/authStore';
-import { handleGoogleCallback } from '../api/auth';
+import { decodeJWT } from '../utils/jwt';
 import './AuthCallback.css';
 
 interface AuthCallbackProps {
@@ -16,24 +16,36 @@ const AuthCallback: React.FC<AuthCallbackProps> = ({ onSuccess, onError }) => {
   useEffect(() => {
     const processCallback = async () => {
       try {
-        // URL에서 code 파라미터 추출
+        // URL에서 token 파라미터 추출
         const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');
+        const token = urlParams.get('token');
         const error = urlParams.get('error');
 
         if (error) {
           throw new Error(`OAuth Error: ${error}`);
         }
 
-        if (!code) {
-          throw new Error('Authorization code가 없습니다.');
+        if (!token) {
+          throw new Error('Token이 없습니다.');
         }
 
-        // 백엔드에 code 전달하여 인증 처리
-        const authResponse = await handleGoogleCallback(code);
+        // JWT 토큰을 localStorage에 저장
+        localStorage.setItem('accessToken', token);
+
+        // JWT 토큰에서 사용자 정보 디코딩
+        const userInfo = decodeJWT(token);
+        
+        if (!userInfo) {
+          throw new Error('유효하지 않은 토큰입니다.');
+        }
 
         // Zustand 스토어에 사용자 정보 저장
-        login(authResponse.user);
+        login({
+          id: userInfo.sub || userInfo.user_id || 'unknown',
+          email: userInfo.email || '',
+          name: userInfo.name || userInfo.email || 'User',
+          picture: userInfo.picture,
+        });
 
         setStatus('success');
         
