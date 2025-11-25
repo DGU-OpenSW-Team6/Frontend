@@ -12,9 +12,11 @@ interface Issue {
 
 interface ResultProps {
   onReset?: () => void;
+  userInitial?: string;
+  onProfileClick?: () => void;
 }
 
-const Result: React.FC<ResultProps> = ({ onReset }) => {
+const Result: React.FC<ResultProps> = ({ onReset, userInitial, onProfileClick }) => {
   // 예시 데이터
   const score = 86;
   const scoreRating = 'Good';
@@ -73,7 +75,7 @@ const Result: React.FC<ResultProps> = ({ onReset }) => {
 
   return (
     <div className="result-page">
-      <Navigation />
+      <Navigation showProfile={true} userInitial={userInitial} onProfileClick={onProfileClick} />
       <div className="result-container">
         <div className="result-card">
           <div className="result-content">

@@ -1,11 +1,18 @@
 .navigation {
   width: 100%;
-  height: 65px;
+  height: 69px;
   background-color: #ffffff;
   border-bottom: 1px solid #e5e7eb;
   display: flex;
   align-items: center;
-  padding: 0 16px;
+  padding: 0 24px;
+}
+
+.nav-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .logo-container {
@@ -32,5 +39,35 @@
   line-height: 24px;
   letter-spacing: -0.3125px;
   color: #10b981;
+}
+
+/* Profile Button */
+.profile-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 0;
+}
+
+.profile-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.profile-initial {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  letter-spacing: -0.150px;
+  color: #ffffff;
+  text-transform: uppercase;
 }
 

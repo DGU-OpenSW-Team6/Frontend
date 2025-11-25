@@ -3,10 +3,15 @@ import Navigation from '../components/Navigation';
 import AnalyzingCard from '../components/AnalyzingCard';
 import './Analyzing.css';
 
-const Analyzing: React.FC = () => {
+interface AnalyzingProps {
+  userInitial?: string;
+  onProfileClick?: () => void;
+}
+
+const Analyzing: React.FC<AnalyzingProps> = ({ userInitial, onProfileClick }) => {
   return (
     <div className="analyzing-page">
-      <Navigation />
+      <Navigation showProfile={true} userInitial={userInitial} onProfileClick={onProfileClick} />
       <div className="analyzing-content">
         <AnalyzingCard />
       </div>

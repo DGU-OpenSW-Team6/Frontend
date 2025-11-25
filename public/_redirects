@@ -1,0 +1,14 @@
+# Netlify SPA 라우팅 설정
+# 모든 경로를 index.html로 리다이렉트하여 React Router가 처리하도록 함
+
+# API 요청은 백엔드로 프록시
+/api/*  https://sketchcheck.shop/api/:splat  200
+
+# 나머지 모든 경로는 React 앱으로
+/*    /index.html   200
+
+
+
+
+
+
